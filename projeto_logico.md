@@ -1,49 +1,49 @@
 **ENTIDADES**
 
-Departamento(IDD, Nome, Descrição)
+Departamento(<u>IDD</u>, Nome, Descrição)
 
-Leito(IDL, IDD)  
+Leito(<u>IDL, IDD</u>)  
 IDD → Departamento(IDD)
 
-Médico(CRM, CPF, Nome, Salário, Departamento)  
+Médico(<u>CRM</u>, CPF, Nome, Salário, Departamento)  
 Departamento → Departamento(IDD)
 
-Enfermeiro(Coren, CPF, Nome, Salário)
+Enfermeiro(<u>Coren</u>, CPF, Nome, Salário)
 
-Medicamento(Fórmula, Nome, Dosagem, Bula)
+Medicamento(<u>Fórmula, Nome, Dosagem</u>, Bula)
 
-Condição(ID\_Condição, Nome, Descrição, Tipo)
+Condição(<u>ID\_Condição</u>, Nome, Descrição, Tipo)
 
-Paciente\_Prontuário(IDP, CPF, Nome, DT\_Nascimento, Endereço, Telefone)
+Paciente\_Prontuário(<u>IDP</u>, CPF, Nome, DT\_Nascimento, Endereço, Telefone)
 
 **RELACIONAMENTOS**
 
-Possui(ID\_Condição, IDP)  
+Possui(<u>ID\_Condição, IDP</u>)  
 ID\_Condição → Condição(ID\_Condição)  
 IDP → Paciente\_Prontuário(IDP)
 
-Administrado(ID\_Condição, IDP, Medicação)  
+Administrado(<u>ID\_Condição, IDP, Medicação</u>)  
 (ID\_Condição, IDP) → Possui(ID\_Condição, IDP)  
 Medicação → Medicamento(Fórmula, Nome, Dosagem)
 
-Atendimento(IDP, CRM, Coren, DT\_Atendimento)  
+Atendimento(<u>IDP, CRM, Coren, DT\_Atendimento</u>)  
 IDP → Paciente\_Prontuário(IDP)  
 CRM → Médico(CRM)  
 Coren → Enfermeiro(Coren)
 
-Gerencia(IDD, CRM)  
+Gerencia(<u>IDD</u>, CRM)  
 IDD → Departamento(IDD)  
 CRM → Médico(CRM)
 
-Lotado(Coren, IDD)  
+Lotado(<u>Coren</u>, IDD)  
 Coren → Enfermeiro(Coren)  
 IDD → Departamento(IDD)
 
-Atua(IDD, Coren)  
+Atua(<u>IDD, Coren</u>)  
 IDD → Departamento(IDD)  
 Coren → Enfermeiro(Coren)
 
-Chefia(CorenChefiado, CorenChefe, DT\_Inicio)  
+Chefia(<u>CorenChefiado, CorenChefe</u>, DT\_Inicio)  
 CorenChefe → Enfermeiro(Coren)  
 CorenChefiado → Enfermeiro(Coren)
 
