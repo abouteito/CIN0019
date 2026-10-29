@@ -277,16 +277,10 @@
         <mxCell id="tLVVBAKUWBlaVF5ojNg3-13" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="NÚMERO" vertex="1">
           <mxGeometry height="20" width="69.5" x="480" y="308.5" as="geometry" />
         </mxCell>
-        <mxCell id="tLVVBAKUWBlaVF5ojNg3-17" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="TELEFONE" vertex="1">
+        <mxCell id="tLVVBAKUWBlaVF5ojNg3-17" parent="1" style="shape=doubleEllipse;perimeter=ellipsePerimeter;whiteSpace=wrap;html=1;shapeInside=1;" value="TELEFONE" vertex="1">
           <mxGeometry height="43" width="80" x="360" y="375.5" as="geometry" />
         </mxCell>
-        <mxCell id="tLVVBAKUWBlaVF5ojNg3-18" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;shape=link;" value="">
-          <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="370" y="405.5" as="sourcePoint" />
-            <mxPoint x="430" y="405.5" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="tLVVBAKUWBlaVF5ojNg3-20" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="DT_ATENDIMENTO" vertex="1">
+        <mxCell id="tLVVBAKUWBlaVF5ojNg3-20" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="&lt;span style=&quot;text-decoration: underline; text-decoration-style: dashed;&quot;&gt;DT_ATENDIMENTO&lt;/span&gt;" vertex="1">
           <mxGeometry height="43" width="128" x="135" y="413.5" as="geometry" />
         </mxCell>
         <mxCell id="tLVVBAKUWBlaVF5ojNg3-22" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="DT_INICIO" vertex="1">
@@ -397,7 +391,7 @@
             <mxPoint x="-340" y="970" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zE04BQjAJoG2Fu9fbN5s-28" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="&lt;u&gt;ID_Leito&lt;/u&gt;" vertex="1">
+        <mxCell id="zE04BQjAJoG2Fu9fbN5s-28" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="&lt;span style=&quot;text-decoration: underline; text-decoration-style: dashed;&quot;&gt;ID_Leito&lt;/span&gt;" vertex="1">
           <mxGeometry height="30" width="80" x="-383" y="1007" as="geometry" />
         </mxCell>
         <mxCell id="zE04BQjAJoG2Fu9fbN5s-29" edge="1" parent="1" source="u20ns_byxSeKuVVTaYa1-14" style="endArrow=none;html=1;rounded=0;defaultLabelBackgroundColor=gap;exitX=1;exitY=0;exitDx=0;exitDy=0;" target="zE04BQjAJoG2Fu9fbN5s-30" value="">
