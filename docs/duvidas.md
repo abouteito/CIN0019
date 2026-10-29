@@ -10,7 +10,7 @@ O [diagrama conceitual atual](../diagrama_atual.drawio) apresenta `POSSUI` como 
 
 No [projeto lógico](../projeto_logico.md), `Possui` usa a chave primária composta `(ID_Condição, IDP)`. Ela impede repetir o mesmo par, mas permite repetir cada componente em pares diferentes. Dessa forma, permite vínculos **N:M**.
 
-### Exemplo da diferença
+### Exemplo
 
 | `IDP` | `ID_Condição` | Significado |
 |---|---|---|
@@ -20,7 +20,7 @@ No [projeto lógico](../projeto_logico.md), `Possui` usa a chave primária compo
 
 Os três pares são diferentes, então a chave composta atual aceita as três linhas. O 1:1 do diagrama não permite esses vínculos simultaneamente.
 
-### Perguntas para decidir a regra
+### Perguntas
 
 1. Um prontuário pode estar associado a várias condições?
 2. Uma condição cadastrada pode ser compartilhada por vários prontuários, ou representa uma ocorrência específica de um paciente?
@@ -46,7 +46,7 @@ Nenhuma dessas alternativas foi aplicada, estou esperando o parecer de vocês :)
 
 No [projeto lógico](../projeto_logico.md), `Condição` possui os atributos `ID_Condição`, `Nome`, `Descrição` e `Tipo`. No [diagrama conceitual](../diagrama_atual.drawio), aparecem apenas `ID_Condição`, `Nome` e `Descrição`.
 
-### Perguntas para decidir
+### Perguntas
 
 1. O que o atributo `Tipo` deve informar? Quais valores ele pode receber?
 2. Essa informação faz parte das regras que a equipe pretende representar ou o atributo foi incluído por engano?
@@ -59,7 +59,7 @@ Se a classificação for necessária, será preciso definir seu significado e ac
 
 O projeto lógico usa apenas `IDP` como chave primária, e as relações que referenciam o prontuário apontam para esse atributo. O conceitual apresenta tanto `ID_Prontuário` quanto `CPF` sublinhados, deixando a interpretação da identificação a esclarecer.
 
-### Alternativas a discutir
+### Alternativas
 
 | Regra desejada | Representação no lógico |
 |---|---|
@@ -67,7 +67,7 @@ O projeto lógico usa apenas `IDP` como chave primária, e as relações que ref
 | `IDP` identifica o prontuário e cada CPF só pode aparecer em um prontuário. | PK `IDP`; CPF também único, com obrigatoriedade definida pela regra adotada. |
 | Apenas a combinação de `IDP` e `CPF` identifica o prontuário. | PK `(IDP, CPF)`; referências devem conter a combinação inteira. |
 
-### Exemplos para esclarecer a decisão
+### Exemplos
 
 - Se uma pessoa puder ter os prontuários 123 e 456, ambos com o mesmo CPF, não se deve impor unicidade ao CPF nessa relação.
 - Na representação atual, não é possível cadastrar dois prontuários com `IDP = 123`, mesmo que os CPFs sejam diferentes: `IDP` é a PK sozinho.
@@ -89,7 +89,7 @@ No [diagrama conceitual](../diagrama_atual.drawio), `LOTADO` liga `MÉDICO` a `D
 
 No [projeto lógico](../projeto_logico.md), a relação `Lotado(Coren, IDD)` referencia enfermeiro, divergindo dos participantes desenhados. Ao mesmo tempo, a coluna `Departamento` em `Médico` e sua FK já conseguem representar a lotação do médico.
 
-### Exemplo da informação desejada
+### Exemplo
 
 | `CRM` | Nome do médico | Departamento |
 |---|---|---|
@@ -99,7 +99,7 @@ No [projeto lógico](../projeto_logico.md), a relação `Lotado(Coren, IDD)` ref
 
 Dois médicos podem estar no departamento 10; cada médico possui no máximo um departamento de lotação. A coluna `Departamento` em `Médico` já representa esses vínculos. Usar `Coren` em `Lotado` registra vínculos de enfermeiros, não os vínculos de médicos do diagrama.
 
-### Alternativas a discutir
+### Alternativas
 
 | Alternativa | Alterações necessárias | Consequência |
 |---|---|---|
