@@ -2,12 +2,15 @@
 Projeto da Disciplina CIN0019 - BANCO DE DADOS
 Repositório destinado ao armazenamento, à documentação e ao versionamento dos diagramas do projeto.
 
-Atualize o modelo lógico após mudanças:
-[Modelo Lógico Hospital](https://docs.google.com/document/d/1PHL03k9P9km5vr7hvdxA0DnVYoLYkLfkzG0TutkT_5s/edit?usp=sharing)
-
+Transferi o modelo lógico do Hospital, antes em
+[Modelo Lógico Hospital](https://docs.google.com/document/d/1PHL03k9P9km5vr7hvdxA0DnVYoLYkLfkzG0TutkT_5s/edit?usp=sharing) para projeto_logico.md.
 ## 📌 Objetivo
 
 Manter os diagramas organizados e atualizados, preservando o histórico visual e editável das alterações realizadas ao longo do desenvolvimento. Cada atualização deve permitir identificar o que mudou, quando mudou e recuperar versões anteriores quando necessário.
+
+## ✏️ Edição no VS Code
+
+O diagrama pode ser editado visualmente no VS Code com a extensão **não oficial** [Draw.io Integration (`hediet.vscode-drawio`)](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio). Após instalar a extensão, abra `diagrama_atual.drawio` no editor do Draw.io. Se o arquivo abrir como XML, use **Reopen Editor With… / Reabrir Editor Com…** e selecione o editor Draw.io.
 
 ## 📁 Organização dos arquivos
 
@@ -16,7 +19,8 @@ Os arquivos devem seguir esta estrutura:
 ```text
 CIN0019/
 ├── README.md
-├── diagrama.drawio
+├── historico.md
+├── diagrama_atual.drawio
 └── historico/
     ├── diagramas/
     │   ├── 2026-10-19_diagrama.drawio
@@ -27,7 +31,8 @@ CIN0019/
     └── ...
 ```
 
-- **`diagrama.drawio`**: versão atual e editável do diagrama.
+- **`diagrama_atual.drawio`**: versão atual e editável do diagrama.
+- **[`historico.md`](historico.md)**: registro das alterações, decisões de modelagem e referências às versões preservadas.
 - **`historico/diagramas/`**: versões antigas dos arquivos `.drawio`, preservadas para consulta ou restauração.
 - **`historico/prints/`**: prints das versões anteriores, permitindo acompanhar visualmente as mudanças.
 - **`AAAA-MM-DD_diagrama.drawio`**: versão do diagrama salva naquela data.
@@ -39,11 +44,11 @@ Sempre que houver uma alteração em qualquer diagrama, siga estas etapas:
 
 1. **Modificar o diagrama:** realizar as alterações necessárias no draw.io.
 2. **Preservar a versão anterior:** antes de substituir o arquivo atual, copiar a versão anterior para `historico/diagramas/`, utilizando o nome com a data correspondente àquela versão.
-3. **Salvar a nova versão:** enviar o arquivo `.drawio` atualizado para a raiz do repositório, mantendo o nome `diagrama.drawio`.
+3. **Salvar a nova versão:** enviar o arquivo `.drawio` atualizado para a raiz do repositório, mantendo o nome `diagrama_atual.drawio`.
 4. **Gerar um print:** exportar o diagrama atualizado como PNG, garantindo que as partes relevantes estejam visíveis e legíveis.
 5. **Nomear o print:** utilizar o padrão `AAAA-MM-DD_diagrama.png`, substituindo a data pela data real da atualização.
-6. **Preservar o histórico visual:** adicionar o novo print ao diretório `historico/prints/`, sem remover ou substituir os prints anteriores.
-7. **Registrar as mudanças:** criar um commit com uma mensagem clara e objetiva, explicando as modificações realizadas.
+6. **Preservar o histórico visual:** adicionar o novo print ao diretório `historico/prints/`, sem remover ou substituir os prints anteriores. Salvar também uma cópia da nova versão em `historico/diagramas/AAAA-MM-DD_diagrama.drawio`, com a mesma data do print. Se já existir um arquivo com esse nome, usar um sufixo para distinguir a atualização, sem sobrescrever o histórico.
+7. **Registrar as mudanças:** atualizar `historico.md` com a data, as modificações, suas justificativas e os links para o diagrama e o print correspondentes. Criar um commit com uma mensagem clara e objetiva, explicando as modificações realizadas.
 8. **Enviar todos os arquivos:** incluir no mesmo commit o novo arquivo `.drawio`, a cópia da versão anterior, o print atualizado e quaisquer outros arquivos relacionados à alteração.
 
 > **Importante:** nunca apague ou substitua uma versão antiga do diagrama ou um print histórico. Cada atualização deve preservar os registros anteriores e acrescentar os novos arquivos necessários.
@@ -54,7 +59,7 @@ Utilize sempre o formato de data ISO 8601: `AAAA-MM-DD`.
 
 | Arquivo | Finalidade |
 |---|---|
-| `diagrama.drawio` | Versão atual editável |
+| `diagrama_atual.drawio` | Versão atual editável |
 | `historico/diagramas/2026-10-19_diagrama.drawio` | Versão anterior preservada |
 | `historico/prints/2026-10-19_diagrama.png` | Print correspondente à atualização |
 
@@ -101,7 +106,7 @@ Caso seja necessário voltar a uma versão antiga:
 
 1. Localize o arquivo desejado em `historico/diagramas/`.
 2. Abra-o no draw.io para conferir se corresponde à versão desejada.
-3. Copie essa versão para a raiz do repositório, utilizando novamente o nome `diagrama.drawio`.
+3. Copie essa versão para a raiz do repositório, utilizando novamente o nome `diagrama_atual.drawio`.
 4. Gere um novo print da versão restaurada.
 5. Registre a restauração em um novo commit, explicando qual versão foi recuperada e por quê.
 
@@ -111,13 +116,14 @@ O histórico de commits do GitHub também pode ser utilizado para consultar vers
 
 ## 📜 Histórico de versões
 
-O histórico do projeto é preservado de três maneiras:
+O histórico do projeto é preservado de quatro maneiras:
 
 - **Arquivos `.drawio` antigos:** permitem abrir, editar e recuperar versões anteriores.
 - **Prints datados:** permitem comparar visualmente a evolução dos diagramas.
 - **Histórico de commits:** registra as datas, as descrições e os arquivos envolvidos em cada alteração.
+- **Registro em `historico.md`:** explica as alterações e as decisões de modelagem de cada versão.
 
-O arquivo `diagrama.drawio` na raiz representa sempre a versão atual.
+O arquivo `diagrama_atual.drawio` na raiz representa sempre a versão atual.
 
 ## ✅ Checklist de atualização
 
@@ -129,6 +135,7 @@ Antes de concluir qualquer atualização, verifique:
 - [ ] Os arquivos foram nomeados com a data correta.
 - [ ] O novo print foi adicionado a `historico/prints/`.
 - [ ] Os diagramas e prints antigos foram preservados.
+- [ ] O registro da atualização foi acrescentado a `historico.md`.
 - [ ] A mensagem do commit descreve as mudanças realizadas.
 - [ ] Todos os arquivos relacionados à atualização foram incluídos no commit.
 
