@@ -2,110 +2,65 @@
 
 [README](../README.md) · [Projeto lógico](../projeto_logico.md) · [Histórico de alterações](historico.md) · [Checklist do projeto](checklist.md)
 
-## 2026-10-29 — Cardinalidade de `Possui` entre `Condição` e `Prontuário Paciente`
+Este documento reúne as questões de modelagem. As **pendentes** ainda não foram decididas; as **resolvidas** foram aplicadas e estão detalhadas no [histórico](historico.md). As decisões abaixo seguiram as recomendações registradas anteriormente e podem ser revistas pela equipe.
+
+## Pendentes
+
+### 2026-10-29 — Cardinalidade de `ADMINISTRADO` com `Medicamento` como catálogo
 
 **Situação: pendente de decisão.**
 
-O [diagrama conceitual atual](../diagrama_atual.drawio) apresenta `POSSUI` como um relacionamento **1:1** entre `CONDIÇÃO` e `PRONTUÁRIO PACIENTE`. Isso limita cada prontuário a uma condição e cada condição a um prontuário.
+`MEDICAMENTO` é identificado por `(Fórmula, Nome, Dosagem)`, ou seja, funciona como um cadastro de medicamentos. Em `ADMINISTRADO`, a cardinalidade 1:N entre `POSSUI` e `MEDICAMENTO` faz com que cada medicamento cadastrado só possa ser vinculado a **uma** associação condição–prontuário.
 
-No [projeto lógico](../projeto_logico.md), `Possui` usa a chave primária composta `(ID_Condição, IDP)`. Ela impede repetir o mesmo par, mas permite repetir cada componente em pares diferentes. Dessa forma, permite vínculos **N:M**.
+| `Fórmula` | `Nome` | `Dosagem` | `ID_Condição` | `IDP` | Situação |
+|---|---|---|---|---|---|
+| F1 | Medicamento A | D1 | 10 | 123 | Permitido. |
+| F1 | Medicamento A | D1 | 20 | 456 | **Não permitido:** repete a PK do medicamento. |
 
-### Exemplo
+Na prática, o mesmo medicamento (por exemplo, o mesmo analgésico na mesma dosagem) não poderia ser administrado a dois pacientes diferentes.
 
-| `IDP` | `ID_Condição` | Significado |
-|---|---|---|
-| 123 | 10 | O prontuário 123 está associado à condição 10. |
-| 123 | 20 | O mesmo prontuário também está associado à condição 20. |
-| 456 | 10 | Outro prontuário também está associado à condição 10. |
+**Perguntas:**
 
-Os três pares são diferentes, então a chave composta atual aceita as três linhas. O 1:1 do diagrama não permite esses vínculos simultaneamente.
+1. `MEDICAMENTO` representa um cadastro compartilhado ou uma prescrição específica de um paciente?
+2. Se for um cadastro compartilhado, `ADMINISTRADO` deveria ser N:M?
 
-### Perguntas
+Se a resposta for N:M, o conceitual muda (`1` passa a `M`) e, no lógico, a PK de `Administrado` passa a incluir `ID_Condição` e `IDP`. Nada foi alterado até a decisão.
 
-1. Um prontuário pode estar associado a várias condições?
-2. Uma condição cadastrada pode ser compartilhada por vários prontuários, ou representa uma ocorrência específica de um paciente?
-
-### Alternativas
-
-| Vários vínculos por prontuário? | Vários vínculos por condição? | Cardinalidade correspondente |
-|---|---|---|
-| Não | Não | 1:1 |
-| Sim | Sim | N:M |
-| Não | Sim | Uma condição para vários prontuários; no máximo uma condição por prontuário. |
-| Sim | Não | Um prontuário para várias condições; no máximo um prontuário por condição. |
-
-- Se a decisão for manter **1:1**, será necessário ajustar as chaves e unicidades no lógico. Uma alternativa é usar `IDP` como PK e tornar `ID_Condição` único e obrigatório. Também será necessário conferir a referência de `Administrado` e a participação total indicada no diagrama.
-- Se a decisão for **N:M**, a PK composta atual expressa essa cardinalidade máxima; será necessário corrigir o conceitual e conferir as participações mínimas.
-- Se apenas um dos lados puder ter vários vínculos, será necessário alinhar ambos os modelos ao 1:N escolhido.
-
-Nenhuma dessas alternativas foi aplicada, estou esperando o parecer de vocês :)
-
-## 2026-10-29 — Significado de `Tipo` em `Condição`
+### 2026-10-29 — Participação total nos dois lados de `POSSUI`
 
 **Situação: pendente de decisão.**
 
-No [projeto lógico](../projeto_logico.md), `Condição` possui os atributos `ID_Condição`, `Nome`, `Descrição` e `Tipo`. No [diagrama conceitual](../diagrama_atual.drawio), aparecem apenas `ID_Condição`, `Nome` e `Descrição`.
+O diagrama desenha `POSSUI` com participação total tanto em `CONDIÇÃO` quanto em `PRONTUÁRIO PACIENTE`. Isso significa que todo prontuário teria ao menos uma condição e toda condição cadastrada teria ao menos um prontuário.
 
-### Perguntas
+**Perguntas:**
 
-1. O que o atributo `Tipo` deve informar? Quais valores ele pode receber?
-2. Essa informação faz parte das regras que a equipe pretende representar ou o atributo foi incluído por engano?
+1. Um paciente pode ter o prontuário aberto antes de qualquer condição ser registrada?
+2. Uma condição pode ser cadastrada antes de existir paciente associado a ela?
 
-Se a classificação for necessária, será preciso definir seu significado e acrescentá-la ao conceitual. Se não for necessária, será preciso remover `Tipo` do lógico. O atributo permanece como está até essa definição.
+Se alguma resposta for "sim", a linha dupla correspondente deve virar linha simples no conceitual. A estrutura relacional não impõe nenhuma das duas participações; hoje elas estão listadas entre as restrições do [projeto lógico](../projeto_logico.md).
 
-## 2026-10-29 — Identificação de `Paciente_Prontuário`
+## Resolvidas
 
-**Situação: pendente de decisão.**
+### 2026-10-29 — Cardinalidade de `Possui` entre `Condição` e `Prontuário Paciente`
 
-O projeto lógico usa apenas `IDP` como chave primária, e as relações que referenciam o prontuário apontam para esse atributo. O conceitual apresenta tanto `ID_Prontuário` quanto `CPF` sublinhados, deixando a interpretação da identificação a esclarecer.
+**Situação: resolvida em 2026-10-29 — N:M.**
 
-### Alternativas
+Um prontuário pode ter várias condições, e uma condição cadastrada (com nome e descrição) é compartilhada por vários prontuários. O conceitual foi corrigido: os rótulos de `POSSUI` passaram de `1`–`1` para `N` (lado `CONDIÇÃO`) e `M` (lado `PRONTUÁRIO PACIENTE`). A PK composta `(ID_Condição, IDP)` do lógico já expressava essa cardinalidade e foi mantida, assim como a FK de `Administrado`. As participações desenhadas não foram alteradas (ver pendência acima).
 
-| Regra desejada | Representação no lógico |
-|---|---|
-| `IDP` identifica o prontuário e um CPF pode aparecer em vários prontuários. | PK `IDP`; CPF como dado, sem unicidade. |
-| `IDP` identifica o prontuário e cada CPF só pode aparecer em um prontuário. | PK `IDP`; CPF também único, com obrigatoriedade definida pela regra adotada. |
-| Apenas a combinação de `IDP` e `CPF` identifica o prontuário. | PK `(IDP, CPF)`; referências devem conter a combinação inteira. |
+### 2026-10-29 — Significado de `Tipo` em `Condição`
 
-### Exemplos
+**Situação: resolvida em 2026-10-29 — atributo removido.**
 
-- Se uma pessoa puder ter os prontuários 123 e 456, ambos com o mesmo CPF, não se deve impor unicidade ao CPF nessa relação.
-- Na representação atual, não é possível cadastrar dois prontuários com `IDP = 123`, mesmo que os CPFs sejam diferentes: `IDP` é a PK sozinho.
-- Se a equipe quiser que o mesmo número de prontuário possa ser usado por pessoas diferentes, será necessário rever a identificação. Uma PK composta permitiria pares como `(123, CPF_A)` e `(123, CPF_B)` e exigiria ajustar as FKs que hoje usam apenas `IDP`.
+`Tipo` não existia no conceitual e não tinha definição nem domínio. Como o conceitual é a referência do modelo, `Tipo` foi removido de `Condição` no lógico. Se a equipe quiser classificar condições, o atributo deve ser definido e acrescentado primeiro ao diagrama.
 
-### Perguntas para decidir
+### 2026-10-29 — Identificação de `Paciente_Prontuário`
 
-1. Uma mesma pessoa pode ter mais de um prontuário?
-2. `IDP` é único no hospital inteiro ou depende do CPF para identificar um prontuário?
-3. O sublinhado em `CPF` no conceitual indica uma chave alternativa, uma parte de chave composta ou uma marcação a corrigir?
+**Situação: resolvida em 2026-10-29 — PK `IDP`, `CPF` único e obrigatório.**
 
-Nenhuma alternativa foi aplicada. `IDP` continua sendo a PK do lógico, e as referências existentes foram mantidas. O alinhamento com o conceitual depende dessa decisão.
+Cada pessoa tem no máximo um prontuário, e `IDP` é único no hospital inteiro. Assim, `IDP` é a PK (e as FKs existentes continuam válidas) e `CPF` é chave alternativa, escrita como `[CPF]!` no lógico. Isso é compatível com o conceitual, onde `ID_Prontuário` e `CPF` já aparecem sublinhados; o diagrama não precisou mudar. Alternativa descartada: PK composta `(IDP, CPF)`, que exigiria ajustar todas as FKs sem benefício para a regra adotada.
 
-## 2026-10-29 — Mapeamento de `LOTADO`
+### 2026-10-29 — Mapeamento de `LOTADO`
 
-**Situação: pendente de decisão.**
+**Situação: resolvida em 2026-10-29 — FK em `Médico`.**
 
-No [diagrama conceitual](../diagrama_atual.drawio), `LOTADO` liga `MÉDICO` a `DEPARTAMENTO`, com cardinalidade 1:N de departamento para médico. O identificador do médico é `CRM`; `Coren` identifica enfermeiro.
-
-No [projeto lógico](../projeto_logico.md), a relação `Lotado(Coren, IDD)` referencia enfermeiro, divergindo dos participantes desenhados. Ao mesmo tempo, a coluna `Departamento` em `Médico` e sua FK já conseguem representar a lotação do médico.
-
-### Exemplo
-
-| `CRM` | Nome do médico | Departamento |
-|---|---|---|
-| 500 | Ana | 10 |
-| 600 | Bruno | 10 |
-| 700 | Carla | 20 |
-
-Dois médicos podem estar no departamento 10; cada médico possui no máximo um departamento de lotação. A coluna `Departamento` em `Médico` já representa esses vínculos. Usar `Coren` em `Lotado` registra vínculos de enfermeiros, não os vínculos de médicos do diagrama.
-
-### Alternativas
-
-| Alternativa | Alterações necessárias | Consequência |
-|---|---|---|
-| Usar a FK já existente em `Médico` — recomendação para discussão | Manter `Médico.Departamento` e sua referência; remover `Lotado` e suas duas referências. | A informação fica em um único lugar, sem tabela adicional nem junção para obter o identificador do departamento do médico. |
-| Manter uma relação separada | Usar `Lotado(CRM, IDD!)`, com PK `CRM` e FKs para `Médico(CRM)` e `Departamento(IDD)`; remover a coluna `Departamento` de `Médico` e sua referência. | A ausência de lotação é representada pela ausência de linha; exige uma relação adicional. |
-
-Na primeira opção, a FK em `Médico` continua opcional, conforme a participação parcial desenhada. Na segunda, `IDD!` é obrigatório dentro de uma linha de lotação, mas um médico pode existir sem linha em `Lotado`.
-
-As duas alternativas podem representar o relacionamento conceitual atual. A decisão é onde guardar a informação, preservando a regra sem duplicar o mesmo vínculo em dois lugares independentes. Nenhuma alternativa foi aplicada; `Lotado` permanece como está até a decisão.
+A relação `Lotado(Coren, IDD)` foi removida: referenciava enfermeiro, enquanto o conceitual liga médico a departamento, e a lotação de enfermeiros já é coberta por `ATUA`. A lotação do médico fica em `Médico.IDD → Departamento(IDD)`, opcional (participação parcial). A coluna `Departamento` foi renomeada para `IDD`, igual às demais referências a departamento. Alternativa descartada: relação separada `Lotado(CRM, IDD!)`, que exigiria uma tabela a mais para a mesma informação.

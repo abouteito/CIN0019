@@ -4,6 +4,48 @@ Registro das alterações do diagrama de entidade-relacionamento e do projeto l�
 
 [README](../README.md) · [Projeto lógico](../projeto_logico.md) · [Dúvidas de modelagem](duvidas.md) · [Checklist do projeto](checklist.md)
 
+## Atualização de 2026-10-29 (segunda revisão do dia)
+
+Diagrama: [2026-10-29_diagrama.drawio](../historico/diagramas/2026-10-29_diagrama.drawio) · Print: [2026-10-29_diagrama.png](../historico/prints/2026-10-29_diagrama.png)
+
+Resolução das dúvidas registradas em [duvidas.md](duvidas.md) e conclusão do [projeto lógico](../projeto_logico.md). As decisões seguiram as recomendações já registradas e estão sujeitas a confirmação da equipe.
+
+### Alterações no diagrama
+
+**`POSSUI`: cardinalidade N:M**
+
+- Os rótulos de cardinalidade passaram de `1`–`1` para `N` (junto a `CONDIÇÃO`) e `M` (junto a `PRONTUÁRIO PACIENTE`).
+- Justificativa: um prontuário pode ter várias condições, e uma condição cadastrada, com nome e descrição, é compartilhada por vários prontuários. O 1:1 anterior impedia isso e divergia da PK composta do lógico.
+- Não foram alteradas as participações (linhas duplas), a ligação com `ADMINISTRADO` nem a cardinalidade `1`/`N` desse vínculo. Apenas dois rótulos de texto foram modificados no arquivo.
+- O print de 29/10 foi gerado a partir do print de 28/10, trocando os dois rótulos; convém reexportá-lo no draw.io se for necessário um print nativo.
+
+### Alterações no projeto lógico
+
+**`LOTADO`: FK em `Médico`**
+
+- A relação `Lotado(Coren, IDD)` foi removida. Ela referenciava enfermeiro, enquanto o conceitual liga médico a departamento. A lotação de enfermeiros já é representada por `Atua`.
+- `Médico.Departamento` foi renomeada para `Médico.IDD`, mantendo a FK para `Departamento(IDD)` e a opcionalidade (participação parcial do médico).
+- Exemplo: os médicos 500 e 600 podem ter `IDD = 10`, e um médico sem lotação tem `IDD` nulo.
+
+**`CONDIÇÃO`: remoção de `Tipo`**
+
+- O atributo não existia no conceitual nem tinha definição ou domínio. Foi removido do lógico, mantendo o conceitual como referência.
+
+**`PACIENTE_PRONTUÁRIO`: `CPF` único e obrigatório**
+
+- `IDP` continua sendo a PK; `CPF` passou a `[CPF]!`. Cada pessoa tem no máximo um prontuário; dois prontuários com o mesmo CPF não são permitidos.
+- Nenhuma FK foi alterada, e o conceitual já sublinhava `ID_Prontuário` e `CPF`.
+
+**Complementos ao documento**
+
+- Acrescentadas a legenda da notação, a correspondência de nomes (`IDD`, `IDL`, `IDP`), a tabela de mapeamento do conceitual e a lista de restrições para a implementação física: domínio de `TipoEnfermeiro`, `DT_Atendimento` como `TIMESTAMP`, `CorenChefe` diferente de `CorenChefiado`, `CPF` único e participações totais que exigem gatilho.
+- As relações `Possui`, `Administrado`, `Atendimento`, `Gerencia`, `Atua` e `Chefia` não foram alteradas.
+
+### Dúvidas
+
+- As quatro dúvidas anteriores foram movidas para "Resolvidas" em [duvidas.md](duvidas.md).
+- Foram registradas duas novas pendências, sem alteração no modelo: a cardinalidade 1:N de `ADMINISTRADO` com `Medicamento` funcionando como catálogo, e a participação total nos dois lados de `POSSUI`.
+
 ## Atualização de 2026-10-29
 
 ### Alterações no projeto lógico
