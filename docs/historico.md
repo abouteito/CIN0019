@@ -4,7 +4,44 @@ Registro das alterações do diagrama de entidade-relacionamento e do projeto l�
 
 [README](../README.md) · [Projeto lógico](../projeto_logico.md) · [Dúvidas de modelagem](duvidas.md) · [Checklist do projeto](checklist.md)
 
+## Atualização de 2026-10-29 (terceira revisão do dia)
+
+Diagrama: [2026-10-29_diagrama.drawio](../historico/diagramas/2026-10-29_diagrama.drawio) · Print: [2026-10-29_diagrama.png](../historico/prints/2026-10-29_diagrama.png)
+
+Esta revisão reverte a cardinalidade de `ADMINISTRADO` definida na segunda revisão do dia, que era 1:N com PK de três campos, e substitui essa decisão pela N:M.
+
+### Motivação
+
+Na versão 1:N, cada medicamento podia ser vinculado a uma única associação `Possui`. Na prática, um medicamento administrado a um paciente não poderia ser administrado a nenhum outro, o que não se sustenta, pois `MEDICAMENTO` é um cadastro compartilhado. A equipe aprovou a N:M.
+
+### Alterações no diagrama
+
+- O rótulo `1` do lado de `POSSUI` em `ADMINISTRADO` foi trocado por `M`. O lado de `MEDICAMENTO` continua `N`.
+- Nenhuma participação (linhas duplas) ou outro rótulo foi alterado.
+- O print de 29/10 foi gerado a partir do print de 28/10 com os rótulos alterados nesta revisão e na anterior, por não haver exportação nativa do draw.io. Convém reexportá-lo pelo draw.io se for necessário um print nativo.
+
+### Alterações no projeto lógico
+
+- A PK de `Administrado` passou de `(Fórmula, Nome, Dosagem)` para `(Fórmula, Nome, Dosagem, ID_Condição, IDP)`, com FKs para `Possui` e `Medicamento`. Os cinco campos são obrigatórios pela PK, por isso os `!` foram retirados.
+- A linha correspondente na tabela de mapeamento foi atualizada para N:M.
+
+Exemplo:
+
+| `Fórmula` | `Nome` | `Dosagem` | `ID_Condição` | `IDP` | Situação |
+|---|---|---|---|---|---|
+| F1 | Medicamento A | D1 | 10 | 123 | Permitido. |
+| F2 | Medicamento B | D2 | 10 | 123 | Permitido: mesmo par, outro medicamento. |
+| F1 | Medicamento A | D1 | 20 | 456 | Permitido: mesmo medicamento, outro par. |
+| F1 | Medicamento A | D1 | 10 | 123 | Não permitido: repete a PK. |
+
+### Dúvidas
+
+- A dúvida de `ADMINISTRADO` foi movida para "Resolvidas" em [duvidas.md](duvidas.md).
+- Continua pendente a participação total de `POSSUI` nos dois lados.
+
 ## Atualização de 2026-10-29 (segunda revisão do dia)
+
+> **Nota:** a decisão de `ADMINISTRADO` como 1:N descrita nesta seção foi revertida na terceira revisão do dia (ver acima).
 
 Diagrama: [2026-10-29_diagrama.drawio](../historico/diagramas/2026-10-29_diagrama.drawio) · Print: [2026-10-29_diagrama.png](../historico/prints/2026-10-29_diagrama.png)
 

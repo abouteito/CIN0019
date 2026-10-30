@@ -72,7 +72,7 @@ CorenChefiado → Enfermeiro(Coren)
 | `ATUA` (N:M) | Relação `Atua`. |
 | `CHEFIA` (autorrelacionamento 1:N) | Relação `Chefia`: PK `CorenChefiado`. |
 | `POSSUI` (N:M) | Relação `Possui`: PK composta. |
-| `ADMINISTRADO` (1:N entre `POSSUI` e `MEDICAMENTO`) | Relação `Administrado`: PK do lado N e FK composta para `Possui`. |
+| `ADMINISTRADO` (N:M entre `POSSUI` e `MEDICAMENTO`) | Relação `Administrado`: PK com os cinco campos (medicamento e par `Possui`), com FKs para `Possui` e `Medicamento`. |
 | `ATENDIMENTO` (ternário N:N:N com discriminador) | Relação `Atendimento`: PK com os três identificadores e `DT_Atendimento`. |
 
 **RESTRIÇÕES PARA A IMPLEMENTAÇÃO FÍSICA**

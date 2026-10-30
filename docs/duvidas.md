@@ -2,29 +2,9 @@
 
 [README](../README.md) · [Projeto lógico](../projeto_logico.md) · [Histórico de alterações](historico.md) · [Checklist do projeto](checklist.md)
 
-Este documento reúne as questões de modelagem. As **pendentes** ainda não foram decididas; as **resolvidas** foram aplicadas e estão detalhadas no [histórico](historico.md). As decisões abaixo seguiram as recomendações registradas anteriormente e podem ser revistas pela equipe.
+Este documento reúne as questões de modelagem. As **pendentes** ainda não foram decididas; as **resolvidas** foram aplicadas e estão detalhadas no [histórico](historico.md).
 
 ## Pendentes
-
-### 2026-10-29 — Cardinalidade de `ADMINISTRADO` com `Medicamento` como catálogo
-
-**Situação: pendente de decisão.**
-
-`MEDICAMENTO` é identificado por `(Fórmula, Nome, Dosagem)`, ou seja, funciona como um cadastro de medicamentos. Em `ADMINISTRADO`, a cardinalidade 1:N entre `POSSUI` e `MEDICAMENTO` faz com que cada medicamento cadastrado só possa ser vinculado a **uma** associação condição–prontuário.
-
-| `Fórmula` | `Nome` | `Dosagem` | `ID_Condição` | `IDP` | Situação |
-|---|---|---|---|---|---|
-| F1 | Medicamento A | D1 | 10 | 123 | Permitido. |
-| F1 | Medicamento A | D1 | 20 | 456 | **Não permitido:** repete a PK do medicamento. |
-
-Na prática, o mesmo medicamento (por exemplo, o mesmo analgésico na mesma dosagem) não poderia ser administrado a dois pacientes diferentes.
-
-**Perguntas:**
-
-1. `MEDICAMENTO` representa um cadastro compartilhado ou uma prescrição específica de um paciente?
-2. Se for um cadastro compartilhado, `ADMINISTRADO` deveria ser N:M?
-
-Se a resposta for N:M, o conceitual muda (`1` passa a `M`) e, no lógico, a PK de `Administrado` passa a incluir `ID_Condição` e `IDP`. Nada foi alterado até a decisão.
 
 ### 2026-10-29 — Participação total nos dois lados de `POSSUI`
 
@@ -41,11 +21,28 @@ Se alguma resposta for "sim", a linha dupla correspondente deve virar linha simp
 
 ## Resolvidas
 
+### 2026-10-29 — Cardinalidade de `Administrado` (`Medicamento` como cadastro compartilhado)
+
+**Situação: resolvida em 2026-10-29 — N:M.**
+
+`MEDICAMENTO` é um cadastro compartilhado: o mesmo medicamento é administrado a vários pacientes, e um par condição–prontuário recebe vários medicamentos. Por isso a cardinalidade entre `POSSUI` e `MEDICAMENTO` passou de 1:N para N:M. O rótulo `1` do lado de `POSSUI` foi trocado por `M` no diagrama.
+
+A PK de `Administrado` passa a ter os cinco campos `(Fórmula, Nome, Dosagem, ID_Condição, IDP)`. Assim, o mesmo medicamento pode aparecer em pares `Possui` diferentes, e o mesmo par pode receber medicamentos diferentes, mas a mesma combinação não se repete. Os cinco campos são obrigatórios pela própria PK e pelas FKs.
+
+| `Fórmula` | `Nome` | `Dosagem` | `ID_Condição` | `IDP` | Situação |
+|---|---|---|---|---|---|
+| F1 | Medicamento A | D1 | 10 | 123 | Permitido. |
+| F2 | Medicamento B | D2 | 10 | 123 | Permitido: mesmo par, outro medicamento. |
+| F1 | Medicamento A | D1 | 20 | 456 | Permitido: mesmo medicamento, outro par. |
+| F1 | Medicamento A | D1 | 10 | 123 | **Não permitido:** repete a PK. |
+
+Alternativa descartada: manter 1:N, que impediria o mesmo medicamento de ser administrado a mais de um par `Possui`.
+
 ### 2026-10-29 — Cardinalidade de `Possui` entre `Condição` e `Prontuário Paciente`
 
 **Situação: resolvida em 2026-10-29 — N:M.**
 
-Um prontuário pode ter várias condições, e uma condição cadastrada (com nome e descrição) é compartilhada por vários prontuários. O conceitual foi corrigido: os rótulos de `POSSUI` passaram de `1`–`1` para `N` (lado `CONDIÇÃO`) e `M` (lado `PRONTUÁRIO PACIENTE`). A PK composta `(ID_Condição, IDP)` do lógico já expressava essa cardinalidade e foi mantida, assim como a FK de `Administrado`. As participações desenhadas não foram alteradas (ver pendência acima).
+Um prontuário pode ter várias condições, e uma condição cadastrada (com nome e descrição) é compartilhada por vários prontuários. O conceitual foi corrigido: os rótulos de `POSSUI` passaram de `1`–`1` para `N` (lado `CONDIÇÃO`) e `M` (lado `PRONTUÁRIO PACIENTE`). A PK composta `(ID_Condição, IDP)` do lógico já expressava essa cardinalidade e foi mantida. As participações desenhadas não foram alteradas (ver pendência acima).
 
 ### 2026-10-29 — Significado de `Tipo` em `Condição`
 
