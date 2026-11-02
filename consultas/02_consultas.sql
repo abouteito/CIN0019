@@ -209,10 +209,10 @@ SELECT nome, salario
 FROM medico
 WHERE salario > ALL (SELECT salario FROM medico WHERE idd = 1);
 
--- [T3b] Enfermeiros que ganham mais que ALGUM plantonista (ANY)
-SELECT nome, salario
+-- [T3b] Plantonistas com valor de plantao maior que o de ALGUM outro plantonista (ANY)
+SELECT nome, valor_plantao
 FROM enfermeiro
-WHERE salario > ANY (SELECT salario FROM enfermeiro WHERE tipo_enfermeiro = 'PLANTONISTA');
+WHERE valor_plantao > ANY (SELECT valor_plantao FROM enfermeiro WHERE tipo_enfermeiro = 'PLANTONISTA');
 
 -- #####################################################################
 -- 9. OPERACAO DE CONJUNTO (UNION / INTERSECT / MINUS)

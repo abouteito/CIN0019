@@ -6,6 +6,7 @@
 -- =====================================================================
 
 -- ---- limpeza (Oracle 23ai) ----
+DROP TABLE IF EXISTS log_salario_enfermeiro CASCADE CONSTRAINTS PURGE;
 DROP FUNCTION IF EXISTS fn_pacientes_do_medico;
 DROP TYPE IF EXISTS t_paciente_atend_tab FORCE;
 DROP TYPE IF EXISTS t_paciente_atend FORCE;
@@ -164,7 +165,7 @@ END;
 
 -- ---- chamadas das funcoes ----
 SELECT fn_qtd_atendimentos_medico('CRM01') AS qtd FROM DUAL;                       -- 3
-SELECT nome, fn_qtd_atendimentos_medico(crm) AS qtd FROM medico ORDER BY crm;      -- 3,2,1,2,0
+SELECT nome, fn_qtd_atendimentos_medico(crm) AS qtd FROM medico ORDER BY crm;      -- 3,2,2,2,0,2
 SELECT nome, fn_idade_paciente(idp) AS idade FROM paciente_prontuario ORDER BY idp;
 SELECT * FROM TABLE(fn_pacientes_do_medico('CRM01'));                              -- Joao 2, Maria 1
 
@@ -204,7 +205,7 @@ END;
 UPDATE medico SET salario = salario + 500 WHERE crm = 'CRM04';   -- permitido
 SELECT crm, salario FROM medico WHERE crm = 'CRM04';              -- 9500
 
--- [TR2] AFTER UPDATE: auditoria de mudanca de salario do enfermeiro
+-- [TR2] AFTER UPDATE: auditoria de mudanca de salario do enfermeiro (so EFETIVO tem salario)
 CREATE TABLE log_salario_enfermeiro (
   id_log          NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   coren           VARCHAR2(10) NOT NULL,
@@ -223,8 +224,8 @@ BEGIN
 END;
 /
 
-UPDATE enfermeiro SET salario = 4200 WHERE coren = 'COR02';
-UPDATE enfermeiro SET salario = 4200 WHERE coren = 'COR02';   -- mesmo valor: nao gera log
+UPDATE enfermeiro SET salario = 4700 WHERE coren = 'COR03';
+UPDATE enfermeiro SET salario = 4700 WHERE coren = 'COR03';   -- mesmo valor: nao gera log
 SELECT coren, salario_antigo, salario_novo FROM log_salario_enfermeiro;   -- 1 linha
 
 -- [TR3] BEFORE INSERT/UPDATE: o gerente de um departamento deve ser lotado nele
@@ -250,8 +251,5 @@ EXCEPTION WHEN OTHERS THEN
 END;
 /
 
--- NOTA sobre participacao total (todo prontuario ter >= 1 atendimento):
--- o PostgreSQL resolve com CONSTRAINT TRIGGER adiado (esta no guia). No Oracle nao existe
--- gatilho adiado ate o COMMIT; a solucao usual e um PROCEDIMENTO que insere o prontuario
--- e o primeiro atendimento na mesma transacao (controle na transacao, como o
--- projeto_logico.md ja preve).
+INSERT INTO gerencia VALUES (4, 'CRM06');   -- permitido: Felipe e lotado na Neurologia
+COMMIT;
