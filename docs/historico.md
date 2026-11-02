@@ -4,6 +4,52 @@ Registro das alterações do diagrama de entidade-relacionamento e do projeto l�
 
 [README](../README.md) · [Projeto lógico](../projeto_logico.md) · [Dúvidas de modelagem](duvidas.md) · [Checklist do projeto](checklist.md)
 
+## Atualização de 2026-11-02
+
+Diagrama: [2026-11-02_diagrama.drawio](../historico/diagramas/2026-11-02_diagrama.drawio) · Print: pendente de exportação pelo draw.io.
+
+### Alterações no diagrama
+
+**Notação nativa do draw.io**
+
+O diagrama foi redesenhado com as formas da biblioteca *Entity Relation* do draw.io, mantendo posições, nomes e cardinalidades:
+
+- Entidades, atributos e relacionamentos passaram a ter o rótulo na própria forma, em vez de caixas de texto sobrepostas a formas vazias.
+- `LEITO` usa a forma de entidade fraca (`double=1`) e `TEM` a de relacionamento identificador, em vez de duas formas sobrepostas.
+- `POSSUI` usa a forma de entidade associativa (`shape=associativeEntity`), em vez de um quadrado com um losango por cima.
+- Chaves usam o sublinhado da própria forma (`fontStyle=4`); a chave parcial `ID_Leito` e o discriminador `DT_ATENDIMENTO` usam sublinhado tracejado.
+- `TELEFONE` usa a elipse dupla de atributo multivalorado.
+- As ligações usam os itens de relacionamento da paleta: linha simples para participação parcial e linha dupla (`shape=link`) para participação total. A linha pontilhada da paleta ("opcional") não foi usada, pois não pertence à notação de Chen adotada na disciplina.
+- As cardinalidades passaram a ser os rótulos da própria linha, como nos itens da paleta, na ponta junto à entidade.
+- Os relacionamentos N:M passaram a usar `M` e `N`, como já registrado em [duvidas.md](duvidas.md): `ATUA` (`M` em `DEPARTAMENTO`, `N` em `ENFERMEIRO`), `POSSUI` (`N` em `CONDIÇÃO`, `M` em `PRONTUÁRIO PACIENTE`) e `ADMINISTRADO` (`M` em `POSSUI`, `N` em `MEDICAMENTO`). O ternário `ATENDIMENTO` manteve `N` nas três pontas.
+- A especialização de `ENFERMEIRO` manteve o círculo `d` com linha dupla (total) e o símbolo de subconjunto nas linhas das subclasses.
+- Foram removidas linhas soltas, sem origem ou destino.
+
+**Participações**
+
+- `PRONTUÁRIO PACIENTE` em `ATENDIMENTO` passou de total para parcial: um paciente pode não ter nenhum atendimento.
+- `POSSUI` passou a ser parcial nos dois lados: um paciente pode não ter condição, e uma condição pode não ter paciente.
+- A construção parcial-total continua representada por `TEM` (participação total de `LEITO`).
+
+**Atributos das subclasses de `ENFERMEIRO`**
+
+- `SALÁRIO` passou de `ENFERMEIRO` para `EFETIVO`, e `EFETIVO` ganhou `DT_ADMISSAO`.
+- `PLANTONISTA` ganhou `VALOR_PLANTAO`.
+- Assim cada subclasse tem atributo próprio, o que justifica a especialização.
+
+### Alterações no projeto lógico
+
+- Saiu das restrições a exigência de gatilho ou controle na transação para as participações totais de `ATENDIMENTO` e `POSSUI`.
+- `Enfermeiro` continua como relação única e passou a ter `Salário`, `DT_Admissão` e `Valor_Plantão`, preenchidos conforme `TipoEnfermeiro` (restrição 1).
+
+### Alterações no SQL
+
+- `enfermeiro` ganhou `dt_admissao` e `valor_plantao`, e `salario` deixou de ser `NOT NULL`. Um `CHECK` exige os atributos de cada tipo e proíbe os do outro.
+- A consulta T3b passou a comparar `valor_plantao` entre plantonistas, e o exemplo do gatilho TR2 passou a usar um enfermeiro efetivo.
+- O gatilho TR3 ganhou um caso de sucesso (`CRM06`, lotado na Neurologia).
+- O arquivo 3 passou a apagar `log_salario_enfermeiro` antes de recriá-la, e pode ser rodado de novo sem rodar o arquivo 1.
+- Os dados foram ampliados para que cada participação parcial tenha ao menos um caso com e um sem: paciente sem atendimento, sem condição ou sem telefone; condição sem paciente; par `Possui` sem medicamento; medicamento nunca administrado; médico sem departamento ou sem atendimento; departamento vazio; enfermeiro sem departamento, sem chefe ou sem atendimento; chefia em três níveis; o mesmo trio de atendimento em datas diferentes.
+
 ## Atualização de 2026-10-29 (terceira revisão do dia)
 
 Diagrama: [2026-10-29_diagrama.drawio](../historico/diagramas/2026-10-29_diagrama.drawio) · Print: [2026-10-29_diagrama.png](../historico/prints/2026-10-29_diagrama.png)

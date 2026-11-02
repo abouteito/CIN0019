@@ -19,9 +19,9 @@ Médico(<u>CRM</u>, CPF, Nome, Salário, IDD)
 IDD → Departamento(IDD)  
 *(`IDD` implementa `LOTADO`: opcional, pois um médico pode não estar lotado em nenhum departamento.)*
 
-Enfermeiro(<u>Coren</u>, CPF, Nome, Salário, TipoEnfermeiro!)
+Enfermeiro(<u>Coren</u>, CPF, Nome, TipoEnfermeiro!, Salário, DT\_Admissão, Valor\_Plantão)
 
-Domínio de `TipoEnfermeiro`: `PLANTONISTA` ou `EFETIVO`.
+Domínio de `TipoEnfermeiro`: `PLANTONISTA` ou `EFETIVO`. `Salário` e `DT_Admissão` pertencem a `EFETIVO`; `Valor_Plantão` pertence a `PLANTONISTA`.
 
 Medicamento(<u>Fórmula, Nome, Dosagem</u>, Bula)
 
@@ -66,7 +66,7 @@ CorenChefiado → Enfermeiro(Coren)
 | `LEITO` / `TEM` (entidade fraca, 1:N identificador) | `Leito(IDL, IDD)`: PK composta, com `IDD` herdado de `Departamento`. |
 | `ENDEREÇO` (atributo composto) | `Rua`, `Número` e `CEP` em `Paciente_Prontuário`. |
 | `TELEFONE` (multivalorado) | Relação `Telefone_Prontuário`. |
-| Herança de `ENFERMEIRO` (total, disjunta) | Relação única com `TipoEnfermeiro!`. |
+| Herança de `ENFERMEIRO` (total, disjunta) | Relação única com `TipoEnfermeiro!` e os atributos das duas subclasses, preenchidos conforme o tipo. |
 | `LOTADO` (1:N, médico parcial) | FK `IDD` em `Médico`; não há relação separada. |
 | `GERENCIA` (1:1, parcial–parcial) | Relação `Gerencia`: PK `IDD` e `CRM` único e obrigatório. |
 | `ATUA` (N:M) | Relação `Atua`. |
@@ -77,14 +77,11 @@ CorenChefiado → Enfermeiro(Coren)
 
 **RESTRIÇÕES PARA A IMPLEMENTAÇÃO FÍSICA**
 
-1. `Enfermeiro.TipoEnfermeiro` é obrigatório e restrito a `PLANTONISTA` ou `EFETIVO`.
+1. `Enfermeiro.TipoEnfermeiro` é obrigatório e restrito a `PLANTONISTA` ou `EFETIVO`. Se `EFETIVO`, `Salário` e `DT_Admissão` são obrigatórios e `Valor_Plantão` é nulo; se `PLANTONISTA`, `Valor_Plantão` é obrigatório e `Salário` e `DT_Admissão` são nulos.
 2. `Atendimento.DT_Atendimento` é data e hora (`TIMESTAMP`), com precisão suficiente para distinguir atendimentos com os mesmos participantes.
 3. `Chefia`: `CorenChefe` deve ser diferente de `CorenChefiado` (ninguém chefia a si mesmo).
 4. `Paciente_Prontuário.CPF` é único e obrigatório: cada pessoa possui no máximo um prontuário.
-5. Participações totais do conceitual que a estrutura das relações não garante sozinha, exigindo gatilho ou controle na transação:
-   - todo prontuário possui ao menos um `Atendimento`;
-   - em `Possui`, todo prontuário se associa a ao menos uma condição e toda condição a ao menos um prontuário, conforme desenhado (ver [duvidas.md](docs/duvidas.md)).
-6. A participação total de `Leito` em `TEM` já é garantida: `IDD` faz parte da PK e da FK.
+5. A participação total de `Leito` em `TEM` já é garantida: `IDD` faz parte da PK e da FK. As participações em `ATENDIMENTO` e `POSSUI` são parciais, então não exigem gatilho nem controle na transação.
 
 **Documentação de apoio**
 

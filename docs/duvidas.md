@@ -6,20 +6,15 @@ Este documento reúne as questões de modelagem. As **pendentes** ainda não for
 
 ## Pendentes
 
-### 2026-10-29 — Participação total nos dois lados de `POSSUI`
-
-**Situação: pendente de decisão.**
-
-O diagrama desenha `POSSUI` com participação total tanto em `CONDIÇÃO` quanto em `PRONTUÁRIO PACIENTE`. Isso significa que todo prontuário teria ao menos uma condição e toda condição cadastrada teria ao menos um prontuário.
-
-**Perguntas:**
-
-1. Um paciente pode ter o prontuário aberto antes de qualquer condição ser registrada?
-2. Uma condição pode ser cadastrada antes de existir paciente associado a ela?
-
-Se alguma resposta for "sim", a linha dupla correspondente deve virar linha simples no conceitual. A estrutura relacional não impõe nenhuma das duas participações; hoje elas estão listadas entre as restrições do [projeto lógico](../projeto_logico.md).
+Nenhuma.
 
 ## Resolvidas
+
+### 2026-10-29 — Participação total nos dois lados de `POSSUI`
+
+**Situação: resolvida em 2026-11-02 — participação parcial nos dois lados.**
+
+Um prontuário pode ser aberto antes de qualquer condição ser registrada, e uma condição pode ser cadastrada antes de existir paciente associado a ela. As linhas duplas de `POSSUI` viraram linhas simples no conceitual, e a restrição correspondente saiu do [projeto lógico](../projeto_logico.md). Pelo mesmo motivo, a participação de `PRONTUÁRIO PACIENTE` em `ATENDIMENTO` também passou a ser parcial.
 
 ### 2026-10-29 — Cardinalidade de `Administrado` (`Medicamento` como cadastro compartilhado)
 
