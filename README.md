@@ -139,6 +139,66 @@ O arquivo `diagrama_atual.drawio` na raiz representa sempre a versão atual.
 
 Os documentos de apoio ficam em `docs/`: consulte o [checklist](docs/checklist.md) para conferir os requisitos, registre questões ainda abertas em [dúvidas](docs/duvidas.md) e documente decisões aplicadas no [histórico](docs/historico.md). Atualize as marcações do checklist após verificar os requisitos e mantenha os links relativos ao local de cada documento.
 
+## 🧠 Perguntas para praticar SQL
+
+Dez perguntas para responder com uma única consulta Oracle cada, da mais fácil à mais difícil. Nenhuma repete o que já está em [`consultas/02_consultas.sql`](consultas/02_consultas.sql). Use os dados de [`consultas/01_criar_e_popular.sql`](consultas/01_criar_e_popular.sql). As perguntas 1, 3, 5 e 10 usam a data atual (`SYSDATE`), então os valores mudam com o tempo.
+
+### Fácil
+
+1. Qual a idade em anos completos de cada paciente, do mais novo ao mais velho?
+
+Linhas retornadas: 7  
+Funções à serem utilizadas: MONTHS_BETWEEN, TRUNC, SYSDATE
+
+2. Qual o menor, o maior, o total e a média (com 2 casas) do valor de plantão entre os enfermeiros plantonistas?
+
+Linhas retornadas: 1  
+Funções à serem utilizadas: MIN, MAX, SUM, AVG, ROUND
+
+3. Quantos anos de casa tem cada enfermeiro efetivo, e em que data completa (ou completou) 5 anos de admissão?
+
+Linhas retornadas: 3  
+Funções à serem utilizadas: MONTHS_BETWEEN, ADD_MONTHS, TRUNC, SYSDATE
+
+### Média
+
+4. Quantos atendimentos ocorreram em cada mês, no formato AAAA-MM?
+
+Linhas retornadas: 3  
+Funções à serem utilizadas: TO_CHAR, COUNT
+
+5. Quantos pacientes há em cada faixa etária (criança até 11 anos, adolescente de 12 a 17, adulto de 18 a 59, idoso a partir de 60)? Faixas sem pacientes não precisam aparecer.
+
+Linhas retornadas: 3  
+Funções à serem utilizadas: CASE, COUNT, MONTHS_BETWEEN, TRUNC
+
+6. Qual a lista de telefones de cada paciente em uma única coluna separada por vírgula, mostrando "sem telefone" para quem não tem nenhum?
+
+Linhas retornadas: 7  
+Funções à serem utilizadas: LISTAGG, NVL
+
+7. Quantos atendimentos cada médico realizou e qual o percentual disso sobre o total de atendimentos (com 1 casa), incluindo médicos sem atendimento?
+
+Linhas retornadas: 6  
+Funções à serem utilizadas: COUNT, ROUND
+
+### Alta
+
+8. Para cada paciente com 2 ou mais atendimentos, quantos dias se passaram entre o primeiro e o último?
+
+Linhas retornadas: 4  
+Funções à serem utilizadas: COUNT, MIN, MAX, TRUNC, CAST
+
+9. Para cada departamento, quantos leitos, médicos e enfermeiros atuantes ele tem e qual a média salarial dos médicos (0 se não houver), incluindo departamentos vazios?
+
+Linhas retornadas: 5  
+Funções à serem utilizadas: COUNT, AVG, ROUND, NVL
+
+10. Para cada paciente, quantas condições, quantos medicamentos e quantos atendimentos ele tem, e há quantos dias foi o último atendimento ("nunca" se não houver)?
+
+Linhas retornadas: 7  
+Funções à serem utilizadas: COUNT, MAX, TRUNC, SYSDATE, NVL, TO_CHAR
+
 ## ✅ Checklist de atualização
 
 Antes de concluir qualquer atualização, verifique:
