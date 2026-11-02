@@ -85,7 +85,8 @@ BEGIN
 END;
 /
 
-SELECT nome, salario FROM medico WHERE idd = 1 ORDER BY crm;   -- Ana 16500, Bruno 13200
+-- Ana 16500, Bruno 13200
+SELECT nome, salario FROM medico WHERE idd = 1 ORDER BY crm;
 
 BEGIN
   sp_prescrever_medicamento(2, 10, 'C8H9NO2', 'Paracetamol', '750mg');   -- OK
@@ -164,10 +165,13 @@ END;
 /
 
 -- ---- chamadas das funcoes ----
-SELECT fn_qtd_atendimentos_medico('CRM01') AS qtd FROM DUAL;                       -- 3
-SELECT nome, fn_qtd_atendimentos_medico(crm) AS qtd FROM medico ORDER BY crm;      -- 3,2,2,2,0,2
+-- 3
+SELECT fn_qtd_atendimentos_medico('CRM01') AS qtd FROM DUAL;
+-- 3,2,2,2,0,2
+SELECT nome, fn_qtd_atendimentos_medico(crm) AS qtd FROM medico ORDER BY crm;
 SELECT nome, fn_idade_paciente(idp) AS idade FROM paciente_prontuario ORDER BY idp;
-SELECT * FROM TABLE(fn_pacientes_do_medico('CRM01'));                              -- Joao 2, Maria 1
+-- Joao 2, Maria 1
+SELECT * FROM TABLE(fn_pacientes_do_medico('CRM01'));
 
 -- #####################################################################
 -- GATILHOS
@@ -202,8 +206,10 @@ EXCEPTION WHEN OTHERS THEN
 END;
 /
 
-UPDATE medico SET salario = salario + 500 WHERE crm = 'CRM04';   -- permitido
-SELECT crm, salario FROM medico WHERE crm = 'CRM04';              -- 9500
+-- permitido
+UPDATE medico SET salario = salario + 500 WHERE crm = 'CRM04';
+-- 9500
+SELECT crm, salario FROM medico WHERE crm = 'CRM04';
 
 -- [TR2] AFTER UPDATE: auditoria de mudanca de salario do enfermeiro (so EFETIVO tem salario)
 CREATE TABLE log_salario_enfermeiro (
@@ -225,8 +231,10 @@ END;
 /
 
 UPDATE enfermeiro SET salario = 4700 WHERE coren = 'COR03';
-UPDATE enfermeiro SET salario = 4700 WHERE coren = 'COR03';   -- mesmo valor: nao gera log
-SELECT coren, salario_antigo, salario_novo FROM log_salario_enfermeiro;   -- 1 linha
+-- mesmo valor: nao gera log
+UPDATE enfermeiro SET salario = 4700 WHERE coren = 'COR03';
+-- 1 linha
+SELECT coren, salario_antigo, salario_novo FROM log_salario_enfermeiro;
 
 -- [TR3] BEFORE INSERT/UPDATE: o gerente de um departamento deve ser lotado nele
 --       (consulta outra tabela, MEDICO, entao nao ha problema de tabela mutante)
@@ -251,5 +259,6 @@ EXCEPTION WHEN OTHERS THEN
 END;
 /
 
-INSERT INTO gerencia VALUES (4, 'CRM06');   -- permitido: Felipe e lotado na Neurologia
+-- permitido: Felipe e lotado na Neurologia
+INSERT INTO gerencia VALUES (4, 'CRM06');
 COMMIT;
