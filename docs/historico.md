@@ -6,7 +6,7 @@ Registro das alterações do diagrama de entidade-relacionamento e do projeto l�
 
 ## Atualização de 2026-11-02
 
-Diagrama: [2026-11-02_diagrama.drawio](../historico/diagramas/2026-11-02_diagrama.drawio) · Print: pendente de exportação pelo draw.io.
+Diagrama: [2026-11-02_diagrama.drawio](../historico/diagramas/2026-11-02_diagrama.drawio) · Print: [2026-11-02_diagrama.png](../historico/prints/2026-11-02_diagrama.png)
 
 ### Alterações no diagrama
 
